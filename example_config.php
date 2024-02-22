@@ -1,6 +1,6 @@
 <?php
 
-$SITE_FOLDER       = "s/tcn"; 
+$SITE_FOLDER       = "s/example"; 
 
 $SITE_NAME         = "Bare Bones PHP";
 $SITE_URL          = "http://barebones-php-json";
