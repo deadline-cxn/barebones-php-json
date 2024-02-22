@@ -25,7 +25,7 @@ $SITE_VERIFY_MESSAGE = "Welcome to $SITE_NAME, if you click this link it will ve
 <a href='$SITE_URL/verify.php?verify=true&id=ZZID&name=ZZNAME'>VERIFY EMAIL</a>";
 
 $SITE_DB_TYPE             = "JSON"; // add others here later
-$SITE_USER_DB_FOLDER      = "db/userdb.json";
+$SITE_USER_DB_FOLDER      = "db/userdb.json"; // you must make a new folder "db" under the root
 
 if(file_exists("$SITE_FOLDER/config.php"))
 include("$SITE_FOLDER/config.php");
