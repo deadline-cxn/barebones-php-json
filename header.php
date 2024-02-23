@@ -39,11 +39,21 @@ echo "
 <body>
 ";
 
-if(isset($_SESSION["DEBUG_VARS"])) {
+function get_vars($x) {
     $out_vars="";
-    foreach($_REQUEST as $k => $v) {
-        $out_vars.="$k = [$v]<br>";
+    foreach($x as $k => $v) {
+        if(is_array($v)) {
+            $out_vars.="$k = array<br>";
+            $out_vars.=get_vars($v);
+        }
+        else
+            $out_vars.="$k = [$v]<br>";
     }
+    return $out_vars;
+}
+
+if(isset($_SESSION["DEBUG_VARS"])) {
+    $out_vars=get_vars($_REQUEST);
     if(!empty($out_vars))
     warn("DEBUG_VARS:<br>".$out_vars);
 }
@@ -98,7 +108,7 @@ foreach($SITE_TOP_MENU as $k => $v) {
     
     echo "</td><td>";
 
-    put_link("$v","$k");
+    put_link($v["URL"],$k);
 }
 
 if(access("admin")) {
