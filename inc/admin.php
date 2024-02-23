@@ -1,6 +1,8 @@
 <?php
+chdir("..");
 include("header.php");
 debug_print(__FILE__."<br>");
+
 
 $access=access("admin");
 if($access) {
@@ -8,13 +10,13 @@ if($access) {
     if(isset($_REQUEST["toggle_debug"])) {
         if(isset($_SESSION["DEBUG"])) unset($_SESSION["DEBUG"]);
         else $_SESSION["DEBUG"]="true";
-        echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/admin.php\">";
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/inc/admin.php\">";
     }
 
     if(isset($_REQUEST["toggle_debug_v"])) {
         if(isset($_SESSION["DEBUG_VARS"])) unset($_SESSION["DEBUG_VARS"]);
         else $_SESSION["DEBUG_VARS"]="true";
-        echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/admin.php\">";
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/inc/admin.php\">";
     }
 
     if(isset($_REQUEST["act"])) {
@@ -33,7 +35,7 @@ if($access) {
                 $result=$USER_DB->getSingle($usr);
                 
 
-                echo "<form action=\"admin.php\" method=\"post\">";
+                echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 $output="<input type=hidden name=act value=user_edit_go>";
 
                 echo "<table border=0>";
@@ -45,7 +47,7 @@ if($access) {
                      ) {
 
                         $output.="<tr><td> ";
-                        $output.="<a href=\"admin.php?act=remove_user_key&user=$usr&key=$k\"><img src=\"images/system/x-button.png\" width=16 height=16 alt=\"Delete key\"></a>";
+                        $output.="<a href=\"$SITE_URL/inc/admin.php?act=remove_user_key&user=$usr&key=$k\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16 alt=\"Delete key\"></a>";
                         $output.="$k</td><td><input type=text name=\"$k\" value=\"";
 
                         if(is_array($v)) {
@@ -73,7 +75,7 @@ if($access) {
                 echo "</table>";                
                 echo "</form>";
 
-                echo "<form action=\"admin.php\" method=\"post\">";
+                echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 
                 echo "<input type=hidden name=act value=edit_user_ak>";
                 echo "<table border=0>";
@@ -127,7 +129,7 @@ if($access) {
                 $USER_DB->update($USER_DATA,$usr);
 
 
-                echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/admin.php?act=user_edit\">";
+                echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/inc/admin.php?act=user_edit\">";
                 
                 
 
@@ -139,7 +141,7 @@ if($access) {
                 $usr=$_REQUEST["user"];
                 echo "DELETE USER: $usr";
                 echo "</h1>";
-                are_you_sure("admin.php?act=user_edit_dg&user=$usr");
+                are_you_sure("$SITE_URL/inc/admin.php?act=user_edit_dg&user=$usr");
                 break;
 
             case "user_edit_dg":
@@ -169,9 +171,9 @@ if($access) {
                 foreach($result2 as $k => $v) {
                     $lc++; if($lc>1) $lc=0;
                     echo "<tr id=tr$lc><td>";
-                    echo "<a href=\"admin.php?act=user_edit_i&user=$k\"><img src=\"images/system/pen.png\" width=16 height=16></a>";
+                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_i&user=$k\"><img src=\"$SITE_URL/images/system/pen.png\" width=16 height=16></a>";
                     echo "</td><td>";
-                    echo "<a href=\"admin.php?act=user_edit_d&user=$k\"><img src=\"images/system/x-button.png\" width=16 height=16></a>";
+                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$k\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
                     echo "</td><td>";
                     echo "$k";
                     echo"</td><td>";
@@ -185,7 +187,7 @@ if($access) {
                 echo "</table>";
 
 
-                echo "<form action=\"admin.php\" method=\"post\">";
+                echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 
                 echo "<input type=hidden name=act value=edit_user_aka>";
                 echo "<table border=0>";
@@ -219,16 +221,16 @@ if($access) {
 
         echo "</td><td id=tda>";
 
-        put_icon("images/system/user_edit.png",64,64,"USER<br>EDIT","admin.php?act=user_edit");
+        put_icon("$SITE_URL/images/system/user_edit.png",64,64,"USER<br>EDIT","$SITE_URL/inc/admin.php?act=user_edit");
 
         echo "</td><td id=tda>";
-        put_icon("images/system/sc_edit.png",64,64,"SHORT<br>CODE EDIT","admin.php?act=sc_edit");
+        put_icon("$SITE_URL/images/system/sc_edit.png",64,64,"SHORT<br>CODE EDIT","$SITE_URL/inc/admin.php?act=sc_edit");
 
         echo "</td><td id=tda>";
-        put_icon("images/system/admin_debug.png",64,64,"Toggle<br>DEBUG","admin.php?toggle_debug=1");
+        put_icon("$SITE_URL/images/system/admin_debug.png",64,64,"Toggle<br>DEBUG","$SITE_URL/inc/admin.php?toggle_debug=1");
 
         echo "</td><td id=tda>";
-        put_icon("images/system/admin_debug.png",64,64,"Toggle<br>DEBUG VARS","admin.php?toggle_debug_v=1");
+        put_icon("$SITE_URL/images/system/admin_debug.png",64,64,"Toggle<br>DEBUG VARS","$SITE_URL/inc/admin.php?toggle_debug_v=1");
 
         echo "</td></tr>";
         echo "</table>";
