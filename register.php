@@ -2,7 +2,7 @@
 include("header.php");
 debug_print(__FILE__."<br>");
 
-dump_vars();
+// dump_vars();
 
 if(isset($_REQUEST["verify"])) {
     // verify=true
@@ -25,13 +25,13 @@ if(isset($_REQUEST["register"])) {
 		exit();
     }
 
-    echo "Wut";
+    // echo "Wut";
     if($pw!=$cpw) {
         echo "Passwords do not match.<br>";
         exit();
     }
     else {
-        echo "Doing it...<br>";
+        // echo "Doing it...<br>";
         $id=time();
         $userdata=Array();
         $userdata["id"]=$id;
@@ -46,9 +46,9 @@ if(isset($_REQUEST["register"])) {
         $arr=array('0'=>"new");
         $userdata["access"]=$arr;
         
-        debug_print("inserted: $usr<br>");
+        // debug_print("inserted: $usr<br>");
         
-        var_dump($userdata);
+        // var_dump($userdata);
 
         echo"<br>";
 

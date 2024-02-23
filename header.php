@@ -87,9 +87,9 @@ if(!empty($SITE_GITHUB_URL)){
 
 echo "</td><td>";
 if(!empty($SITE_FACEBOOK_URL)){
-    if(empty($SITE_FACEBOOK_ICON))
-        $SITE_FACEBOOK_ICON="images/social/facebook.png";
-    if(file_exists($SITE_FACEBOOK_ICON))
+    
+    $SITE_FACEBOOK_ICON="images/social/facebook.png";
+    //if(file_exists($SITE_FACEBOOK_ICON))
         put_simage_link_nw("$SITE_URL/$SITE_FACEBOOK_ICON",64,64,"FACEBOOK!",$SITE_FACEBOOK_URL);
 }
 
