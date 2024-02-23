@@ -1,6 +1,7 @@
 <?php
 
-$SITE_FOLDER       = "s/example"; 
+$SITE_FOLDER       = "example"; // make a folder named s, and copy contents of example into s, or rename example folder to s
+// $SITE_FOLDER       = "s";
 
 $SITE_NAME         = "Bare Bones PHP";
 $SITE_URL          = "http://barebones-php-json";

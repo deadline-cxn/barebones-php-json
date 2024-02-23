@@ -157,7 +157,7 @@ if($access) {
                 echo "</h1><br>";
 
                 $query = [
-                    "meatloaf" => "1"
+                    "list" => "1"
                 ];
                 $result2 = $USER_DB->getList($query);
 

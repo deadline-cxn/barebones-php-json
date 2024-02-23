@@ -38,7 +38,7 @@ if(isset($_REQUEST["register"])) {
         else {
             $id=time();
             $userdata=Array();
-            $userdata["meatloaf"]="1"; // this is needed to have a same key for everyone for lists
+            $userdata["list"]="1"; // this is needed to have a same key for everyone for lists
             $userdata["id"]=$id;
             $userdata["name"]=$usr;
             $userdata["pw"]=$pw;

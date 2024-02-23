@@ -160,6 +160,12 @@ else {
     echo "&nbsp;&nbsp;<div class=white id=white>".$_SESSION["LOGGED_IN"]."</div><BR>";
     
     put_link("profile.php","EDIT PROFILE");
+
+    echo "<br>";
+    echo "<BR>";
+    put_link("todo.php","TODO: LEFT MENUs");
+
+   /*
     echo "<br>";
     echo "<BR>";
     put_link("mymeatloaf.php","MY MEATLOAF");
@@ -167,6 +173,8 @@ else {
     echo "<br>";
     echo "<BR>";
     put_link("myshortcodes.php","MY SHORT CODES");
+
+    */
 
     echo "<BR>";
     echo "<BR>";
