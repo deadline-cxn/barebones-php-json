@@ -32,9 +32,8 @@ if($access) {
                 echo "EDITING USER: $usr";
                 echo "</h1>";
                 
-                $result=$USER_DB->getSingle($usr);
+                $result=get_user_data($usr);
                 
-
                 echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 $output="<input type=hidden name=act value=user_edit_go>";
 
@@ -126,8 +125,7 @@ if($access) {
                 // predump($USER_DATA);
 
                 $act="user_edit";
-                $USER_DB->update($USER_DATA,$usr);
-
+                set_user_data($usr,$USER_DATA);
 
                 echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/inc/admin.php?act=user_edit\">";
                 
@@ -148,7 +146,13 @@ if($access) {
                 $usr=$_REQUEST["user"];
                 if(!empty($_REQUEST["Yes"])) {
                     warn("<h2>DELETING USER: $usr</h2>");
-                    $USER_DB->delete($usr);
+                    $p=$GLOBALS["SITE_JSON_USERS"];
+                    $cd = getcwd();
+                    $f="$cd/$p/$usr";
+                    $cmd="rm -rf $f";
+                    
+                    //warn("<h2>FOLDER: $f</h2><h2>cmd: $cmd</h2>");
+                    exec($cmd);
 
                 }               
             
@@ -158,31 +162,32 @@ if($access) {
                 echo "EDIT USERS";
                 echo "</h1><br>";
 
-                $query = [
-                    "list" => "1"
-                ];
-                $result2 = $USER_DB->getList($query);
+                
 
                 $lc=0;
 
                 echo "<table border=0 cellspacing=0 cellpadding=10>";
                 echo"<tr id=tr$lc><td></td><td></td><td>USER</td><td>EMAIL</td><td>ACCESS</td></tr>";
                 
-                foreach($result2 as $k => $v) {
+                $users=get_user_list();
+
+                foreach($users as $k => $u) {
+                    $user=get_user_data($u);
                     $lc++; if($lc>1) $lc=0;
                     echo "<tr id=tr$lc><td>";
-                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_i&user=$k\"><img src=\"$SITE_URL/images/system/pen.png\" width=16 height=16></a>";
+                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_i&user=$u\"><img src=\"$SITE_URL/images/system/pen.png\" width=16 height=16></a>";
                     echo "</td><td>";
-                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$k\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
+                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$u\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
                     echo "</td><td>";
-                    echo "$k";
+                    echo $user["name"];
                     echo"</td><td>";
-                    echo $v["email"];
+                    echo $user["email"];
                     echo"</td><td>";
-                    foreach($v["access"] as $kk => $vv)
+                    foreach($user["access"] as $kk => $vv)
                         echo "$vv ";
                     echo "</td>";
                     echo "</tr>";
+                    
                 }
                 echo "</table>";
 

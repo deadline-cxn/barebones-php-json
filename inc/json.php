@@ -1,170 +1,46 @@
 <?php
-/***
- * DB
- * A simple json db class
- */
-class DB
-{
-  private $path = '';
-  private $db = [];
 
-  /**
-   * CONSTRUCTOR
-   * 
-   * @param $path: string (default 'db.json')
-   */
-  public function __construct($path = "db.json"){
-    
-    $this->path = $path;
-
-    if(!file_exists($path)){
-      // If the .json extension is not provided, append it
-      if(strpos($path, '.json') === false){ $path .= '.json'; }
-
-      $fp = fopen($path,"wb");
-      fwrite($fp, "{}");
-      fclose($fp);
-    }
-
-    // Get the contect of the current path
-    $this->db = json_decode(file_get_contents($path), true);
-
-    
+function get_user_list() {
+  $users=Array();
+  $p=$GLOBALS["SITE_JSON_USERS"];
+  $cd = getcwd();
+  $x=scandir("$cd/$p");
+  foreach($x as $k => $v) {
+    if(($v!=".") && ($v!=".."))
+      $users[$v]=$v;
   }
-
-  /**
-   * SAVE
-   * Save the new db
-   */
-  private function save(){
-    $json = ($this->db === "{}") ? $this->db : json_encode($this->db);
-    echo "$this->path<br>";
-    file_put_contents($this->path, $json);
-  }
-
-  /**
-   * INSERT
-   * 
-   * @param $data: array
-   * @param $key: string (optional)
-   * 
-   * @return DB
-   */
-  public function insert($data, $key = ""){
-    if($key !== "")
-      $this->db[$key] = $data;
-    else
-      $this->db[] = $data;
-
-    $this->save();
-    
-    return $this;
-  }
-  
-  /**
-   * UPDATE
-   * 
-   * @param $data: array
-   * @param $key: string
-   * 
-   * @return DB
-   */
-  public function update($data, $key){
-    if($key !== "")
-      $update = array_merge($this->db[$key], $data);
-      $this->db[$key] = $update;
-
-    $this->save();
-
-    return $this;
-  }
-
-  /**
-   * DELETE
-   * 
-   * @param $key: string
-   * 
-   * @return DB
-   */
-  public function delete($key){
-    unset($this->db[$key]);
-
-    $this->save();
-
-    return $this;
-  }
-
-  /**
-   * GET SINGLE
-   * 
-   * @param $key: string
-   * 
-   * @return array
-   */
-  public function getSingle($key) {
-    if(!empty($this->db[$key]))
-      return $this->db[$key];
-    else {
-      $data=Array();
-      $data["name"]="null";
-      return $data;
-    }
-  }
-
-  /**
-   * GET LIST
-   * 
-   * @param $conditions: array (optional)
-   * @param $orderBy: array (optional)
-   * 
-   * @return array
-   */
-  public function getList($conditions = [], $orderBy = []){
-    $result = [];
-
-    if(empty($conditions)){
-      $result = $this->db;
-    }else{
-      foreach($this->db as $key => $value){
-        $requirements = true;
-
-        foreach($conditions as $k => $v){
-          if($value[$k] !== $v){
-            $requirements = false;
-          }
-        }
-
-        if($requirements) $result[$key] = $value;
-      }
-    }
-
-    if(!isset($orderBy["on"])) $orderBy["on"]="";
-    if(!isset($orderBy["order"])) $orderBy["order"]="";
-
-    if($orderBy['on'] !== '' && $orderBy['order'] !== ''){
-      usort($result, function($first, $second) use($orderBy){
-        if($orderBy['order'] === "ASC"){
-          return strcmp($first[$orderBy['on']], $second[$orderBy['on']]) > 0;
-        }else{
-          return strcmp($first[$orderBy['on']], $second[$orderBy['on']]) < 0;
-        }
-      });
-    }
-
-    return $result;
-  }
-
-  /**
-   * CLEAR
-   * 
-   * @return DB
-   */
-  public function clear(){
-    $this->db = "{}";
-
-    $this->save();
-
-    return $this;
-  }
+  return $users;
 }
-?>
+
+function get_user_data($user) {
+  $p=$GLOBALS["SITE_JSON_USERS"];
+  $user=strtolower($user);
+  $file="$p/$user/$user.json";
+  $USER_DATA = @json_decode(file_get_contents($file), true);
+  return $USER_DATA;
+}
+
+function set_user_data($user,$USER_DATA) {
+  predump($USER_DATA);
+  $p=$GLOBALS["SITE_JSON_USERS"];
+  $user=strtolower($user);
+  @mkdir("$p/$user");
+  $file="$p/$user/$user.json";
+  //echo "set_user_data->[$file]";
+  $x=json_encode($USER_DATA, JSON_PRETTY_PRINT);
+  file_put_contents($file,$x);
+}
+
+function access($ax) {
+  if(!isset($_SESSION["LOGGED_IN"])) return false;
+  $user=$_SESSION["LOGGED_IN"];
+  $USER_DATA = get_user_data($user);
+  foreach($USER_DATA["access"] as $k => $v) {
+      debug_print("[$k]=[$v]");
+      if($v==$ax)
+          return true;
+  }
+  return false;
+}
+
+

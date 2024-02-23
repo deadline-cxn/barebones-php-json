@@ -4,16 +4,15 @@ include("inc/funcs.php");
 require("inc/json.php");
 include("inc/class.email.php");
 
-$USER_DB=new DB($SITE_USER_DB_FOLDER); // USER DB
-// $MLSC_DB=new DB($SITE_MEATLOAF_DB_FOLDER); // MEAT LOAF SHORT CODE DB
-
 session_name($SITE_SESSION_NAME);
 session_cache_expire(99999);
 session_start();
 
-@$USER_DATA=$USER_DB->getSingle($_SESSION["LOGGED_IN"]);
-
-include("inc/acts.php");
+if(isset($_SESSION["LOGGED_IN"])) {
+    $user=$_SESSION["LOGGED_IN"];
+    $USER_DATA=get_user_data($user);
+    // set_user_data($USER_DATA);
+}
 
 echo "<!DOCTYPE html>";
 
@@ -122,18 +121,16 @@ if(!logged_in()) {
     //echo"<BR>LOGIN<BR><BR>";
 
     echo "
-            <form action=\"index.php\" method=\"post\">
+            <form action=\"login.php\" method=\"post\">
             <div class=\"containerz\">
                 <label for=\"uname\"><b>Username</b></label>
                 <input type=\"text\" placeholder=\"Enter Username\" name=\"uname\" required>
                 <label for=\"psw\"><b>Password</b></label>
                 <input type=\"password\" placeholder=\"Enter Password\" name=\"psw\" required>
-                
             </div>
             <input type=\"submit\" value=LOGIN>
             </form>
             ";
-
 
         echo"
         <form action=\"register.php\">
@@ -178,7 +175,7 @@ else {
 
     echo "<BR>";
     echo "<BR>";
-    put_link("$SITE_URL/index.php?logout=1","LOGOUT");
+    put_link("$SITE_URL/login.php?logout=1","LOGOUT");
     
     echo "<BR>";
     echo "<BR>";

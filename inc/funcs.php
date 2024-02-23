@@ -1,6 +1,12 @@
 <?php
 include("config.php");
 
+function dump_vars() {
+    foreach ($_REQUEST as $k => $v ) {
+        echo "$k = $v <br>";
+    }
+}
+
 function randomPassword() {
     $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789!@#$%^&*(";
     for ($i = 0; $i < 8; $i++) {
@@ -27,17 +33,6 @@ function preprint($x) {
     echo"<br><pre>";
     $x;
     echo"<br></pre>";
-}
-function access($ax) {
-    if(!isset($_SESSION["LOGGED_IN"])) return false;
-    $USER_DB=$GLOBALS["USER_DB"]; // USER DB
-    @$USER_DATA=$USER_DB->getSingle($_SESSION["LOGGED_IN"]);    
-    foreach($USER_DATA["access"] as $k => $v) {
-        debug_print("[$k]=[$v]");
-        if($v==$ax)
-            return true;
-    }
-    return false;
 }
 
 function warn($txt) { 
@@ -80,4 +75,10 @@ function logged_in() {
         return true;
     }
     return false;
+}
+
+
+
+function goto_page($x) {
+	echo " <script language=\"javascript\" type=\"text/javascript\"> window.location=\"$x\"; </script> <!--// -->";
 }
