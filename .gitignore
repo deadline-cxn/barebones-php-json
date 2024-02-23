@@ -3,4 +3,10 @@ config.php
 s/*
 db/*
 example/*
-ml64/*
+m64/*
+files/*
+cxntg/*
+old/*
+pdfs/*
+subs/*
+vids/*
