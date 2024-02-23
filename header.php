@@ -4,16 +4,15 @@ include("inc/funcs.php");
 require("inc/json.php");
 include("inc/class.email.php");
 
-$USER_DB=new DB($SITE_USER_DB_FOLDER); // USER DB
-// $MLSC_DB=new DB($SITE_MEATLOAF_DB_FOLDER); // MEAT LOAF SHORT CODE DB
-
 session_name($SITE_SESSION_NAME);
 session_cache_expire(99999);
 session_start();
 
-@$USER_DATA=$USER_DB->getSingle($_SESSION["LOGGED_IN"]);
-
-include("inc/acts.php");
+if(isset($_SESSION["LOGGED_IN"])) {
+    $user=$_SESSION["LOGGED_IN"];
+    $USER_DATA=get_user_data($user);
+    // set_user_data($USER_DATA);
+}
 
 echo "<!DOCTYPE html>";
 
@@ -40,11 +39,21 @@ echo "
 <body>
 ";
 
-if(isset($_SESSION["DEBUG_VARS"])) {
+function get_vars($x) {
     $out_vars="";
-    foreach($_REQUEST as $k => $v) {
-        $out_vars.="$k = [$v]<br>";
+    foreach($x as $k => $v) {
+        if(is_array($v)) {
+            $out_vars.="$k = array<br>";
+            $out_vars.=get_vars($v);
+        }
+        else
+            $out_vars.="$k = [$v]<br>";
     }
+    return $out_vars;
+}
+
+if(isset($_SESSION["DEBUG_VARS"])) {
+    $out_vars=get_vars($_REQUEST);
     if(!empty($out_vars))
     warn("DEBUG_VARS:<br>".$out_vars);
 }
@@ -75,6 +84,15 @@ if(!empty($SITE_GITHUB_URL)){
     if(file_exists($SITE_GITHUB_ICON))
         put_simage_link_nw("$SITE_URL/$SITE_GITHUB_ICON",64,64,"GITHUB!",$SITE_GITHUB_URL);
 }
+
+echo "</td><td>";
+if(!empty($SITE_FACEBOOK_URL)){
+    
+    $SITE_FACEBOOK_ICON="images/social/facebook.png";
+    //if(file_exists($SITE_FACEBOOK_ICON))
+        put_simage_link_nw("$SITE_URL/$SITE_FACEBOOK_ICON",64,64,"FACEBOOK!",$SITE_FACEBOOK_URL);
+}
+
 echo "</td></tr>";
 echo "</table>";
 
@@ -90,7 +108,7 @@ foreach($SITE_TOP_MENU as $k => $v) {
     
     echo "</td><td>";
 
-    put_link("$v","$k");
+    put_link($v["URL"],$k);
 }
 
 if(access("admin")) {
@@ -113,18 +131,16 @@ if(!logged_in()) {
     //echo"<BR>LOGIN<BR><BR>";
 
     echo "
-            <form action=\"index.php\" method=\"post\">
+            <form action=\"login.php\" method=\"post\">
             <div class=\"containerz\">
                 <label for=\"uname\"><b>Username</b></label>
                 <input type=\"text\" placeholder=\"Enter Username\" name=\"uname\" required>
                 <label for=\"psw\"><b>Password</b></label>
                 <input type=\"password\" placeholder=\"Enter Password\" name=\"psw\" required>
-                
             </div>
             <input type=\"submit\" value=LOGIN>
             </form>
             ";
-
 
         echo"
         <form action=\"register.php\">
@@ -169,7 +185,7 @@ else {
 
     echo "<BR>";
     echo "<BR>";
-    put_link("$SITE_URL/index.php?logout=1","LOGOUT");
+    put_link("$SITE_URL/login.php?logout=1","LOGOUT");
     
     echo "<BR>";
     echo "<BR>";

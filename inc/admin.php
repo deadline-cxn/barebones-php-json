@@ -32,9 +32,8 @@ if($access) {
                 echo "EDITING USER: $usr";
                 echo "</h1>";
                 
-                $result=$USER_DB->getSingle($usr);
+                $result=get_user_data($usr);
                 
-
                 echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 $output="<input type=hidden name=act value=user_edit_go>";
 
@@ -126,8 +125,7 @@ if($access) {
                 // predump($USER_DATA);
 
                 $act="user_edit";
-                $USER_DB->update($USER_DATA,$usr);
-
+                set_user_data($usr,$USER_DATA);
 
                 echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/inc/admin.php?act=user_edit\">";
                 
@@ -148,7 +146,13 @@ if($access) {
                 $usr=$_REQUEST["user"];
                 if(!empty($_REQUEST["Yes"])) {
                     warn("<h2>DELETING USER: $usr</h2>");
-                    $USER_DB->delete($usr);
+                    $p=$GLOBALS["SITE_JSON_USERS"];
+                    $cd = getcwd();
+                    $f="$cd/$p/$usr";
+                    $cmd="rm -rf $f";
+                    
+                    //warn("<h2>FOLDER: $f</h2><h2>cmd: $cmd</h2>");
+                    exec($cmd);
 
                 }               
             
@@ -158,31 +162,32 @@ if($access) {
                 echo "EDIT USERS";
                 echo "</h1><br>";
 
-                $query = [
-                    "list" => "1"
-                ];
-                $result2 = $USER_DB->getList($query);
+                
 
                 $lc=0;
 
                 echo "<table border=0 cellspacing=0 cellpadding=10>";
                 echo"<tr id=tr$lc><td></td><td></td><td>USER</td><td>EMAIL</td><td>ACCESS</td></tr>";
                 
-                foreach($result2 as $k => $v) {
+                $users=get_user_list();
+
+                foreach($users as $k => $u) {
+                    $user=get_user_data($u);
                     $lc++; if($lc>1) $lc=0;
                     echo "<tr id=tr$lc><td>";
-                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_i&user=$k\"><img src=\"$SITE_URL/images/system/pen.png\" width=16 height=16></a>";
+                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_i&user=$u\"><img src=\"$SITE_URL/images/system/pen.png\" width=16 height=16></a>";
                     echo "</td><td>";
-                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$k\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
+                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$u\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
                     echo "</td><td>";
-                    echo "$k";
+                    echo $user["name"];
                     echo"</td><td>";
-                    echo $v["email"];
+                    echo $user["email"];
                     echo"</td><td>";
-                    foreach($v["access"] as $kk => $vv)
+                    foreach($user["access"] as $kk => $vv)
                         echo "$vv ";
                     echo "</td>";
                     echo "</tr>";
+                    
                 }
                 echo "</table>";
 
@@ -201,7 +206,86 @@ if($access) {
                 
                 break;
 
-            case "sc_edit":
+            case "top_menu_edit":
+                echo "<h1>ADMINISTRATION PANEL >> ";
+                echo "TOP MENU";
+                echo "</h1><br>";
+
+
+                echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
+                
+                echo "<input type=hidden name=act value=top_menu_edit_go>";
+                echo "<table border=0>";
+
+                foreach($SITE_TOP_MENU as $k => $v) {                
+                    echo "<tr>";
+                    echo "<td>";
+                    echo "<a href=\"$SITE_URL/inc/admin.php?act=top_menu_edit_r&i=$k\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
+                    echo "</td>";
+                    echo "<td>$k</td>";
+                    
+                    echo "<td><input type=text name=\"var[$k][name]\" value=\"$k\"></td>";
+                    echo "<td><input type=text name=\"var[$k][url]\" value=\"".$v["URL"]."\"></td>";
+                    echo "<td><input type=text name=\"var[$k][pri]\" value=\"".$v["PRI"]."\"></td>";
+                    echo "</tr>";
+                }
+                
+                
+                echo "<tr><td></td><td><td></td></td><td></td><td><input type=submit name=\"UPDATE\"  value=\"UPDATE\"></td></tr>";
+                echo "</table>";                
+                                
+
+                break;
+
+            case "top_menu_edit_go":
+
+                echo "<h1>ADMINISTRATION PANEL >> ";
+                echo "TOP MENU >> UPDATE";
+                echo "</h1><br>";
+
+                foreach($SITE_TOP_MENU as $k => $v) {
+                    $x=$_REQUEST["var"][$k];
+                    if( $x["name"] != $k) {
+                        echo "FOUND ".$x['name']." != ".$k."<br>";
+                        $SITE_TOP_MENU[$x['name']]=Array(); // $k;
+                        $SITE_TOP_MENU[$x['name']]["NAME"]=$k;
+                        $SITE_TOP_MENU[$x['name']]["URL"]=$x['url'];
+                        $SITE_TOP_MENU[$x['name']]["PRI"]=$x['pri'];
+                        
+                    }
+                }
+                $file="$SITE_FOLDER/top_menu.php";
+                
+                file_put_contents($file,"<?php\n\$SITE_TOP_MENU = ".var_export($SITE_TOP_MENU, true).";\n ");
+
+                break;
+
+            case "top_menu_edit_r":
+                echo "<h1>ADMINISTRATION PANEL >> ";
+                echo "TOP MENU >> REMOVE ITEM";
+                echo "</h1><br>";
+                $i=$_REQUEST["i"];
+                $file="$SITE_FOLDER/top_menu.php";
+                echo "rm $i from $file<br>";
+                unset($SITE_TOP_MENU[$i]);
+                file_put_contents($file,"<?php\n\$SITE_TOP_MENU = ".var_export($SITE_TOP_MENU, true).";\n ");
+                break;
+
+            case "left_menu_edit":
+                echo "<h1>ADMINISTRATION PANEL >> ";
+                echo "LEFT MENU";
+                echo "</h1><br>";
+
+                echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
+                
+                echo "<input type=hidden name=act value=left_menu_edit_go>";
+                echo "<table border=0>";
+
+                // echo "<tr><td>New Key (All)</td><td><input type=text name=\"new_key\" value=\"\"> </td></tr>";
+                // echo "<tr><td>Value</td><td><input type=text name=\"new_value\" value=\"\"></td></tr>";
+                
+                echo "<tr><td></td><td><input type=submit name=\"Add Item\"  value=\"Add Item\"></td></tr>";
+                echo "</table>";                                
 
                 break;
 
@@ -220,8 +304,13 @@ if($access) {
         echo "<tr><td id=tda>";
 
         echo "</td><td id=tda>";
-
         put_icon("$SITE_URL/images/system/user_edit.png",64,64,"USER<br>EDIT","$SITE_URL/inc/admin.php?act=user_edit");
+
+        echo "</td><td id=tda>";
+        put_icon("$SITE_URL/images/system/menu.png",64,64,"TOP<br>MENU","$SITE_URL/inc/admin.php?act=top_menu_edit");
+
+        echo "</td><td id=tda>";
+        put_icon("$SITE_URL/images/system/menu.png",64,64,"LEFT<br>MENU","$SITE_URL/inc/admin.php?act=left_menu_edit");
 
         echo "</td><td id=tda>";
         put_icon("$SITE_URL/images/system/admin_debug.png",64,64,"Toggle<br>DEBUG","$SITE_URL/inc/admin.php?toggle_debug=1");
