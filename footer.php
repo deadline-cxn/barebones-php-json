@@ -13,7 +13,7 @@ echo "  ";
 echo "</td>";
 echo "</tr></table>";
 
-echo "<hr>About Meatloaf<br>";
+echo "<hr>$SITE_FOOTER_MESSAGE<br>";
 
 
 echo "

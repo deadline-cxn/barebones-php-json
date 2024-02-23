@@ -224,9 +224,6 @@ if($access) {
         put_icon("$SITE_URL/images/system/user_edit.png",64,64,"USER<br>EDIT","$SITE_URL/inc/admin.php?act=user_edit");
 
         echo "</td><td id=tda>";
-        put_icon("$SITE_URL/images/system/sc_edit.png",64,64,"SHORT<br>CODE EDIT","$SITE_URL/inc/admin.php?act=sc_edit");
-
-        echo "</td><td id=tda>";
         put_icon("$SITE_URL/images/system/admin_debug.png",64,64,"Toggle<br>DEBUG","$SITE_URL/inc/admin.php?toggle_debug=1");
 
         echo "</td><td id=tda>";
@@ -234,8 +231,15 @@ if($access) {
 
         echo "</td></tr>";
         echo "</table>";
-   
-    }
+
+        
+
+        if(file_exists("$SITE_FOLDER/admin_extension.php")) {
+            echo "<hr>";
+            warn("<h1>$SITE_NAME >> Admin.Extensions</h1>");
+            include("$SITE_FOLDER/admin_extension.php");
+        }
+       }
     
         
 }
