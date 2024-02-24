@@ -297,6 +297,7 @@ if($access) {
 
     }
     else {
+        if(!isset($_REQUEST["act_ext"])) {
 
         echo "<h1>ADMINISTRATION PANEL</h1>";
 
@@ -320,12 +321,13 @@ if($access) {
 
         echo "</td></tr>";
         echo "</table>";
+        // echo "<hr>";
+        }
 
         
 
         if(file_exists("$SITE_FOLDER/admin_extension.php")) {
-            echo "<hr>";
-            warn("<h1>$SITE_NAME >> Admin.Extensions</h1>");
+            // warn("<h1>$SITE_NAME >> ADMIN</h1>");
             include("$SITE_FOLDER/admin_extension.php");
         }
        }

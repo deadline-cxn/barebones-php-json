@@ -131,7 +131,7 @@ if(!logged_in()) {
     //echo"<BR>LOGIN<BR><BR>";
 
     echo "
-            <form action=\"login.php\" method=\"post\">
+            <form action=\"$SITE_URL/login.php\" method=\"post\">
             <div class=\"containerz\">
                 <label for=\"uname\"><b>Username</b></label>
                 <input type=\"text\" placeholder=\"Enter Username\" name=\"uname\" required>
@@ -170,7 +170,7 @@ else {
 
     echo "<br>";
     echo "<BR>";
-    put_link("$SITE_URL/todo.php","TODO: LEFT MENUs");
+    // put_link("$SITE_URL/todo.php","TODO: LEFT MENUs");
 
    /*
     echo "<br>";
