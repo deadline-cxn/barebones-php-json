@@ -1,4 +1,4 @@
-<?php
+<?php 
 include("config.php");
 include("inc/funcs.php");
 require("inc/json.php");
