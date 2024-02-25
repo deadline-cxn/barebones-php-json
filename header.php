@@ -168,8 +168,8 @@ else {
     
     put_link("$SITE_URL/profile.php","EDIT PROFILE");
 
-    echo "<br>";
-    echo "<BR>";
+    // echo "<br>";
+    // echo "<BR>";
     // put_link("$SITE_URL/todo.php","TODO: LEFT MENUs");
 
    /*
