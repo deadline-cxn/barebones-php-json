@@ -80,3 +80,4 @@ foreach($USER_DATA as $k => $v) {
 echo "</table>";
 
 include("footer.php");
+ 
