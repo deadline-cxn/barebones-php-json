@@ -14,13 +14,13 @@ document.getElementById('selectfile').onchange = function() {
 function ajax_file_upload(file_obj) {
     if(file_obj != undefined) {
         var form_data = new FormData();                  
-        form_data.append('file', file_obj);
+        form_data.append('files', file_obj);
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", "profile_ajax.php", true);
         xhttp.onload = function(event) {
             oOutput = document.querySelector('.img-content');
             if (xhttp.status == 200 && this.responseText != "error") {
-                oOutput.innerHTML = " <hr><img src='"+ this.responseText +"' alt='Image' /> " + this.responseText;
+                oOutput.innerHTML = " <hr><img src='"+ this.responseText +"' alt='Image' /> " + this.responseText + "";
             } else {
                 oOutput.innerHTML = "Error occurred when trying to upload your file.";
             }

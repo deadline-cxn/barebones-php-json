@@ -20,30 +20,37 @@ echo "<hr>";
 if($EDIT) {
     echo "<h1>PROFILE</h1>";
     echo "
+
+    <form>
+  <input type=\"file\" name=\"my-file\" multiple>
+</form>
         
+    ";
+    /*
+    
     <div id=\"drop_file_zone\" ondrop=\"upload_file(event)\" ondragover=\"return false\">
         <div id=\"drag_upload_file\">
             <p>Drop file here</p>
             <p>or</p>
             <p><input type=\"button\" value=\"Select File\" onclick=\"file_explorer();\" /></p>
-            <input type=\"file\" id=\"selectfile\" />
+            <input type=\"file\" name=\"filez\" id=\"selectfile\" />
         </div>
     </div>
     <div class=\"img-content\"></div>
-    <script src=\"js/profile.js\"></script>
-    ";
+    <script src=\"$SITE_URL/profile.js\"></script>
+    */
 }
 echo "<table border=0><tr>";
 echo "<td>";
 if($USER_DATA["profile_pic"]!="empty") {
-    put_avatar($USER_DATA["profile_pic"],$AVATAR_SIZE,$AVATAR_SIZE,"","profile.php");
+    put_avatar($USER_DATA["profile_pic"],$AVATAR_SIZE,$AVATAR_SIZE,"","$SITE_URL/profile.php");
 
        
        
 
 }
 else {
-    put_avatar("$SITE_URL/images/system/user.png",$AVATAR_SIZE,$AVATAR_SIZE,"","profile.php");
+    put_avatar("$SITE_URL/images/system/user.png",$AVATAR_SIZE,$AVATAR_SIZE,"","$SITE_URL/profile.php");
     
 }
 

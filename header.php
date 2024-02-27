@@ -39,19 +39,6 @@ echo "
 <body>
 ";
 
-function get_vars($x) {
-    $out_vars="";
-    foreach($x as $k => $v) {
-        if(is_array($v)) {
-            $out_vars.="$k = array<br>";
-            $out_vars.=get_vars($v);
-        }
-        else
-            $out_vars.="$k = [$v]<br>";
-    }
-    return $out_vars;
-}
-
 if(isset($_SESSION["DEBUG_VARS"])) {
     $out_vars=get_vars($_REQUEST);
     if(!empty($out_vars))
@@ -157,11 +144,11 @@ else {
     // show profile here, logout, my meatloaf, etc
 
     if($USER_DATA["profile_pic"]!="empty") {
-        put_avatar($USER_DATA["profile_pic"],96,96,"","profile.php");
+        put_avatar($USER_DATA["profile_pic"],96,96,"","$SITE_URL/profile.php");
         
     }
     else {
-        put_avatar("$SITE_URL/images/system/user.png",96,96,"","profile.php");
+        put_avatar("$SITE_URL/images/system/user.png",96,96,"","$SITE_URL/profile.php");
         
     }
     echo "&nbsp;&nbsp;<div class=white id=white>".$_SESSION["LOGGED_IN"]."</div><BR>";

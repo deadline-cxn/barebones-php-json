@@ -1,6 +1,39 @@
 <?php
 include("config.php");
 
+
+
+function get_vars($x) {
+    $out_vars="";
+    foreach($x as $k => $v) {
+        if(is_array($v)) {
+            $out_vars.="$k = array<br>";
+            $out_vars.=get_vars($v);
+        }
+        else
+            $out_vars.="$k = [$v]<br>";
+    }
+    return $out_vars;
+}
+
+
+function get_vars2($x) {
+    $o="<pre>";
+    foreach ($x as $k => $v ) {
+        if(is_array($v)) {
+            $o.=get_vars($v);
+        }
+        else {
+            $o.="-[$k] = [$v] <br>";
+        }
+    }
+    $o.="</pre>";
+    return $o;
+}
+
+
+
+
 function dump_vars($x) {
     echo "<pre>";
     foreach ($x as $k => $v ) {
