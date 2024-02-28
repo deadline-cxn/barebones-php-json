@@ -37,7 +37,9 @@ if($access) {
                 echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 $output="<input type=hidden name=act value=user_edit_go>";
 
-                echo "<table border=0>";
+                echo "<div id=outtab ><table border=0 cellspacing=0 cellpadding=8>";
+
+                $lc=0;
 
                 foreach($result as $k => $v) {
 
@@ -45,9 +47,11 @@ if($access) {
                         ($k!="id") 
                      ) {
 
-                        $output.="<tr><td> ";
+                        $lc++; if($lc>1) $lc=0;
+
+                        $output.="<tr id=tr$lc><td> ";
                         $output.="<a href=\"$SITE_URL/inc/admin.php?act=remove_user_key&user=$usr&key=$k\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16 alt=\"Delete key\"></a>";
-                        $output.="$k</td><td><input type=text name=\"$k\" value=\"";
+                        $output.="$k</td><td><input id=longin type=text name=\"$k\" value=\"";
 
                         if(is_array($v)) {
                             $o="";
@@ -71,7 +75,7 @@ if($access) {
                 }
                 echo "$output";
                 echo "<tr><td></td><td><input type=submit name=Go value=Go></td></tr>";
-                echo "</table>";                
+                echo "</table></div>";                
                 echo "</form>";
 
                 echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
@@ -166,7 +170,7 @@ if($access) {
 
                 $lc=0;
 
-                echo "<table border=0 cellspacing=0 cellpadding=10>";
+                echo "<div id=outtab ><table border=0 cellspacing=0 cellpadding=10>";
                 echo"<tr id=tr$lc><td></td><td></td><td>USER</td><td>EMAIL</td><td>ACCESS</td></tr>";
                 
                 $users=get_user_list();
@@ -179,6 +183,15 @@ if($access) {
                     echo "</td><td>";
                     echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$u\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
                     echo "</td><td>";
+                    if( (empty($user["profile_pic"])) || 
+                        ($user["profile_pic"]=="empty") 
+                    ){
+                        put_avatar("$SITE_URL/images/system/user.png",64,64,"","$SITE_URL/profile.php");
+                    }
+                    else {
+                        put_avatar($user["profile_pic"],64,64,"","$SITE_URL/profile.php");
+                    }
+                    echo "</td><td>";
                     echo $user["name"];
                     echo"</td><td>";
                     echo $user["email"];
@@ -189,7 +202,7 @@ if($access) {
                     echo "</tr>";
                     
                 }
-                echo "</table>";
+                echo "</table></div>";
 
 
                 echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";

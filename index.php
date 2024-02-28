@@ -1,11 +1,6 @@
 <?php
 include("header.php");
-debug_print(__FILE__."<br>");
 
-echo "<br>";
-
-
-
-
+include("s/index.php");
 
 include("footer.php");

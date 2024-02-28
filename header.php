@@ -11,13 +11,9 @@ session_start();
 if(isset($_SESSION["LOGGED_IN"])) {
     $user=$_SESSION["LOGGED_IN"];
     $USER_DATA=get_user_data($user);
-    // set_user_data($USER_DATA);
 }
 
 echo "<!DOCTYPE html>";
-
-debug_print(__FILE__."<br>");
-// predump($USER_DATA);
 
 $uri=$_SERVER["REQUEST_URI"];
 $uri=explode("?",$uri)[0];
@@ -144,31 +140,26 @@ else {
     // show profile here, logout, my meatloaf, etc
 
     if($USER_DATA["profile_pic"]!="empty") {
-        put_avatar($USER_DATA["profile_pic"],96,96,"","$SITE_URL/profile.php");
+        put_avatar($USER_DATA["profile_pic"],150,150,"","$SITE_URL/profile.php");
         
     }
     else {
-        put_avatar("$SITE_URL/images/system/user.png",96,96,"","$SITE_URL/profile.php");
+        put_avatar("$SITE_URL/images/system/user.png",150,150,"","$SITE_URL/profile.php");
         
     }
     echo "&nbsp;&nbsp;<div class=white id=white>".$_SESSION["LOGGED_IN"]."</div><BR>";
     
-    put_link("$SITE_URL/profile.php","EDIT PROFILE");
+    put_link("$SITE_URL/profile.php","PROFILE");
 
-    // echo "<br>";
-    // echo "<BR>";
-    // put_link("$SITE_URL/todo.php","TODO: LEFT MENUs");
-
-   /*
+    
+    foreach($SITE_LEFT_MENU as $k => $v) {
+    $url=strtolower($k);
+    $url=str_replace(" ","_",$url);
+    $url.=".php";
     echo "<br>";
-    echo "<BR>";
-    put_link("mymeatloaf.php","MY MEATLOAF");
-
     echo "<br>";
-    echo "<BR>";
-    put_link("myshortcodes.php","MY SHORT CODES");
-
-    */
+    put_link($v["URL"],$k);
+}
 
     echo "<BR>";
     echo "<BR>";

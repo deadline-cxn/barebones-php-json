@@ -21,7 +21,7 @@ function get_user_data($user) {
 }
 
 function set_user_data($user,$USER_DATA) {
-  predump($USER_DATA);
+  // predump($USER_DATA);
   $p=$GLOBALS["SITE_JSON_USERS"];
   $user=strtolower($user);
   @mkdir("$p/$user");

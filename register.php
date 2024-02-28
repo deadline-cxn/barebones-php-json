@@ -31,8 +31,8 @@ if(isset($_REQUEST["register"])) {
         exit();
     }
     else {
-        // echo "Doing it...<br>";
-        $id=time();
+        
+        $id=create_guid();
         $userdata=Array();
         $userdata["id"]=$id;
         $userdata["name"]=$usr;
@@ -45,21 +45,20 @@ if(isset($_REQUEST["register"])) {
 
         $arr=array('0'=>"new");
         $userdata["access"]=$arr;
-        
-        // debug_print("inserted: $usr<br>");
-        
-        // var_dump($userdata);
 
         echo"<br>";
 
         set_user_data($usr,$userdata);
 
         $message=$SITE_VERIFY_MESSAGE;
+        
         $subject=$SITE_VERIFY_SUBJECT;
         $message=str_replace("ZZID",$id,$message);
         $message=str_replace("ZZNAME",$usr,$message);
         $mail = new Mail($SITE_SEND_EMAIL, $em, $subject, $message);
         $mail->Send();
+        echo "Thank you for registering...<br>";
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL\">";
     }
 
 }
