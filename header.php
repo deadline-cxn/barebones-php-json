@@ -11,13 +11,9 @@ session_start();
 if(isset($_SESSION["LOGGED_IN"])) {
     $user=$_SESSION["LOGGED_IN"];
     $USER_DATA=get_user_data($user);
-    // set_user_data($USER_DATA);
 }
 
 echo "<!DOCTYPE html>";
-
-debug_print(__FILE__."<br>");
-// predump($USER_DATA);
 
 $uri=$_SERVER["REQUEST_URI"];
 $uri=explode("?",$uri)[0];

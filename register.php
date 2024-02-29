@@ -36,6 +36,7 @@ if(isset($_REQUEST["register"])) {
         exit();
     }
     else {
+
         $id=create_guid();
         $userdata=Array();
         $userdata["id"]=$id;
@@ -48,9 +49,11 @@ if(isset($_REQUEST["register"])) {
         $userdata["website"]=" ";
         $arr=array('0'=>"new");
         $userdata["access"]=$arr;
+
         echo"<br>";
         set_user_data($usr,$userdata);
         $message=$SITE_VERIFY_MESSAGE;
+        
         $subject=$SITE_VERIFY_SUBJECT;
         $message=str_replace("ZZID",$id,$message);
         $message=str_replace("ZZNAME",$usr,$message);

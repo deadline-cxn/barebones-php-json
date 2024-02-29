@@ -1,8 +1,6 @@
 <?php
 include("config.php");
 
-
-
 function get_vars($x) {
     $out_vars="";
     foreach($x as $k => $v) {
@@ -15,7 +13,6 @@ function get_vars($x) {
     }
     return $out_vars;
 }
-
 
 function get_vars2($x) {
     $o="<pre>";
@@ -31,9 +28,6 @@ function get_vars2($x) {
     return $o;
 }
 
-
-
-
 function dump_vars($x) {
     echo "<pre>";
     foreach ($x as $k => $v ) {
@@ -44,6 +38,7 @@ function dump_vars($x) {
             echo "-[$k] = [$v] <br>";
         }
     }
+
     echo "</pre>";
 }
 
@@ -153,6 +148,4 @@ function send_discord_channel_message($SITE_DISCORD_CHANNEL_WEBHOOK,$SITE_DISCOR
         $result = curl_exec($crl);
         curl_close($crl);
 }
-
-
 
