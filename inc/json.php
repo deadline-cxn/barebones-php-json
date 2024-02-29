@@ -3,8 +3,7 @@
 function get_user_list() {
   $users=Array();
   $p=$GLOBALS["SITE_JSON_USERS"];
-  $cd = getcwd();
-  $x=scandir("$cd/$p");
+  $x=scandir("$p");
   foreach($x as $k => $v) {
     if(($v!=".") && ($v!=".."))
       $users[$v]=$v;
@@ -21,12 +20,24 @@ function get_user_data($user) {
 }
 
 function set_user_data($user,$USER_DATA) {
-  predump($USER_DATA);
   $p=$GLOBALS["SITE_JSON_USERS"];
   $user=strtolower($user);
   @mkdir("$p/$user");
   $file="$p/$user/$user.json";
-  //echo "set_user_data->[$file]";
+  
+  
+  foreach($USER_DATA as $k => $v) {
+    if(!is_array($v)) {
+      $USER_DATA[$k]=str_ireplace("<?php","*YOU CAN NOT USE PHP FOR THIS*", $USER_DATA[$k]);
+      $USER_DATA[$k]=str_ireplace("?>","*YOU CAN NOT USE PHP FOR THIS*", $USER_DATA[$k]);
+      $USER_DATA[$k]=str_ireplace("<","&lt;", $USER_DATA[$k]);
+      $USER_DATA[$k]=str_ireplace(">","&gt;", $USER_DATA[$k]);
+    }
+    else {
+
+    }
+  }
+
   $x=json_encode($USER_DATA, JSON_PRETTY_PRINT);
   file_put_contents($file,$x);
 }

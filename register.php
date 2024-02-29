@@ -1,15 +1,5 @@
 <?php
 include("header.php");
-debug_print(__FILE__."<br>");
-
-// dump_vars();
-
-if(isset($_REQUEST["verify"])) {
-    // verify=true
-    // id=ZZID
-    // name=ZZNAME
-}
-
 
 if(isset($_REQUEST["register"])) {
     echo "<hr>";
@@ -21,18 +11,32 @@ if(isset($_REQUEST["register"])) {
     $result=get_user_data($usr);
 
     if(!empty($result)) if($result["name"]!="null") {
-        echo "User already exists!<br>";
+        warn("User already exists!<br>");
 		exit();
     }
 
-    // echo "Wut";
+    if( stristr($usr, " ") ||
+        stristr($usr, "@") ||
+        stristr($usr, "#") ||
+        stristr($usr, "$") ||
+        stristr($usr, "%") ||
+        stristr($usr, "^") ||
+        stristr($usr, "&") ||
+        stristr($usr, "*") ||
+        stristr($usr, "(") ||
+        stristr($usr, ")") ||
+        stristr($usr, "+") ||
+        stristr($usr, "!") ){
+
+        warn('Invalid Name, please use characters and numbers only with no spaces.');
+        exit();
+    }
     if($pw!=$cpw) {
-        echo "Passwords do not match.<br>";
+        warn("Passwords do not match.<br>");
         exit();
     }
     else {
-        // echo "Doing it...<br>";
-        $id=time();
+        $id=create_guid();
         $userdata=Array();
         $userdata["id"]=$id;
         $userdata["name"]=$usr;
@@ -42,26 +46,19 @@ if(isset($_REQUEST["register"])) {
         $userdata["profile_info"]="empty";
         $userdata["verified"]="false";            
         $userdata["website"]=" ";
-
         $arr=array('0'=>"new");
         $userdata["access"]=$arr;
-        
-        // debug_print("inserted: $usr<br>");
-        
-        // var_dump($userdata);
-
         echo"<br>";
-
         set_user_data($usr,$userdata);
-
         $message=$SITE_VERIFY_MESSAGE;
         $subject=$SITE_VERIFY_SUBJECT;
         $message=str_replace("ZZID",$id,$message);
         $message=str_replace("ZZNAME",$usr,$message);
         $mail = new Mail($SITE_SEND_EMAIL, $em, $subject, $message);
         $mail->Send();
+        echo "Thank you for registering...<br>";
+        echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL\">";
     }
-
 }
 
 

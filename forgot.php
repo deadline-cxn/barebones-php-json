@@ -1,47 +1,28 @@
 <?php
 include("header.php");
-debug_print(__FILE__."<br>");
 
 echo "<br>";
 echo "Forgot password...";
 
-if(!empty($_REQUEST["act"])) {
+if(isset($_REQUEST["act"])) {
     if($_REQUEST["act"]=="forgot") {
 
-        $email=$_REQUEST["email"];
-        $query = [
-            "email" => "$email"
-        ];
-        @$user=$USER_DB->getList($query);
-        $email_found="";
-        foreach($user as $k => $v) {
-            echo "$k<br>";
-            if(is_array($v)) {
-                foreach($v as $kk => $vv) {
-                    if($kk=="email") {
-                        $email_found=$vv;
-                        $usr=$k;
-                        echo "emf $email_found<br>";
-                    }
-                }
-            }
-        }
+        $user=$_REQUEST["name"];
+        $USER_DATA=get_user_data($user);
 
-        if(!empty($email_found)) {
+        if(!empty($USER_DATA["email"])) {
+
             $rp=randomPassword();
-            echo "<br>GENERATING RANDOM PASSWORD: [$rp] <br>";
+            echo "<br>GENERATING NEW PASSWORD, Please check your email.<br>";
+            $USER_DATA["pw"]=md5($rp);
+            set_user_data($user,$USER_DATA);
 
-            $user[$usr]["pw"]=md5($rp);
+            $subject="Meatloaf.cc new password...";
+            $message="Your password was reset on Meatloaf.cc. <br>Please log in with the following credentials:<br>";
+            $message.="User [$user]<br> Password [$rp]<br>";
 
-
-
-            $USER_DB->update($user[$usr],$user[$usr]["name"]);
-
-
-            if(!empty($user["email"])) {
-                echo "FETCHING ".$user["name"]."...<br>";
-                echo " ".$user["email"]."...<br>";
-            }
+            $mail = new Mail($SITE_SEND_EMAIL, $USER_DATA["email"], $subject, $message);
+            $mail->Send();            
         }
     }
 
@@ -50,7 +31,7 @@ else {
     echo "
     <form action=forgot.php>
     <input type=hidden name=act value=forgot>
-    Enter your email address: <input type=text name=email>
+    Enter your site USER NAME: <input type=text name=name>
     <input type=submit name=\"Go\" value=\"Go\">
     </form>
     ";

@@ -1,10 +1,50 @@
 <?php
 include("config.php");
 
-function dump_vars() {
-    foreach ($_REQUEST as $k => $v ) {
-        echo "$k = $v <br>";
+
+
+function get_vars($x) {
+    $out_vars="";
+    foreach($x as $k => $v) {
+        if(is_array($v)) {
+            $out_vars.="$k = array<br>";
+            $out_vars.=get_vars($v);
+        }
+        else
+            $out_vars.="$k = [$v]<br>";
     }
+    return $out_vars;
+}
+
+
+function get_vars2($x) {
+    $o="<pre>";
+    foreach ($x as $k => $v ) {
+        if(is_array($v)) {
+            $o.=get_vars($v);
+        }
+        else {
+            $o.="-[$k] = [$v] <br>";
+        }
+    }
+    $o.="</pre>";
+    return $o;
+}
+
+
+
+
+function dump_vars($x) {
+    echo "<pre>";
+    foreach ($x as $k => $v ) {
+        if(is_array($v)) {
+            dump_vars($v);
+        }
+        else {
+            echo "-[$k] = [$v] <br>";
+        }
+    }
+    echo "</pre>";
 }
 
 function randomPassword() {
@@ -82,3 +122,37 @@ function logged_in() {
 function goto_page($x) {
 	echo " <script language=\"javascript\" type=\"text/javascript\"> window.location=\"$x\"; </script> <!--// -->";
 }
+function create_guid() { // Create GUID (Globally Unique Identifier)
+    $guid = '';
+    $namespace = rand(11111, 99999);
+    $uid = uniqid('', true);
+    $data = $namespace;
+    $data .= $_SERVER['REQUEST_TIME'];
+    $data .= $_SERVER['HTTP_USER_AGENT'];
+    $data .= $_SERVER['REMOTE_ADDR'];
+    $data .= $_SERVER['REMOTE_PORT'];
+    $hash = strtoupper(hash('ripemd128', $uid . $guid . md5($data)));
+    $guid = substr($hash,  0,  8) . '-' .
+            substr($hash,  8,  4) . '-' .
+            substr($hash, 12,  4) . '-' .
+            substr($hash, 16,  4) . '-' .
+            substr($hash, 20, 12);
+    return $guid;
+}
+
+
+function send_discord_channel_message($SITE_DISCORD_CHANNEL_WEBHOOK,$SITE_DISCORD_DATA,$s) {
+        $SITE_DISCORD_DATA["content"]=$s;
+        $post_data = json_encode($SITE_DISCORD_DATA);
+        $crl = curl_init($SITE_DISCORD_CHANNEL_WEBHOOK);
+        curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+        curl_setopt($crl, CURLOPT_POST, true);
+        curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($crl, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($post_data)));
+        $result = curl_exec($crl);
+        curl_close($crl);
+}
+
+
+

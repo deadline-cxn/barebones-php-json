@@ -1,11 +1,8 @@
 <?php
 include("header.php");
-debug_print(__FILE__."<br>");
+ 
+echo "$SITE_URL/$SITE_FOLDER/index.php";
 
-echo "<br>";
-
-
-
-
+include("$SITE_FOLDER/index.php");
 
 include("footer.php");

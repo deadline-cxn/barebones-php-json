@@ -1,4 +1,4 @@
-<?php
+<?php 
 include("config.php");
 include("inc/funcs.php");
 require("inc/json.php");
@@ -32,25 +32,41 @@ $a=rand(0,99999999);
 echo "
 <html>
     <head>
+		<meta content='width=device-width, initial-scale=1, shrink-to-fit=no' name='viewport'>
+		<meta content='A Commodore IEC Serial multi-device emulator' name='description'>
+		<meta content='Jaime Idolpx' name='author'>
+
+		<meta name=\"keywords\" content=\"Meatloaf Commodore\" />
+		<meta name=\"news_keywords\" content=\"Meatloaf Commodore\" />
+		<meta name=\"language\" content=\"English\">
+
+		<!-- TYPE BELOW IS PROBABLY: 'website' or 'article' or look on https://ogp.me/#types -->
+		<meta property=\"og:type\" content='website'/>
+		<meta property=\"og:locale\" content=\"en_US\" />
+		<meta property=\"og:title\" content=\"Meatloaf!\" />
+		<meta property=\"og:description\" content=\"A Commodore IEC Serial multi-device emulator\" />
+		<meta property=\"og:url\" content=\"https://meatloaf.cc\" />
+		<meta property=\"og:site_name\" content=\"Meatloaf!\" />
+		<meta property=\"og:updated_time\" content=\"2024-02-28T14:22:00+00:00\" />
+		<meta property=\"og:image:type\" content=\"image/svg\">
+		<meta property=\"og:image\" content=\"http://meatloaf.cc/media/meatloaf.logo.svg\" />
+		<meta property=\"og:image:secure_url\" content=\"https://meatloaf.cc/media/meatloaf.logo.svg\" />
+		<meta property=\"og:image:width\" content=\"1200\" />
+		<meta property=\"og:image:height\" content=\"630\" />
+		<meta name=\"twitter:card\" content=\"summary_large_image\" />
+		<meta name=\"twitter:description\" content=\"A Commodore IEC Serial multi-device emulator\" />
+		<meta name=\"twitter:title\" content=\"Meatloaf!\" />
+		<meta name=\"twitter:image\" content=\"https://meatloaf.cc/media/meatloaf.logo.svg\" />
+		<link rel=\"shortcut icon\" type=\"image/png\" href=\"/media/meatloaf.icon.32.png\"/>
+		<!--link rel=\"manifest\" href=\"manifest.json\"-->
+
+
         <link rel=\"stylesheet\" type=\"text/css\" href=\"$SITE_CSS_URL?v=$a\" />
         <meta charset=\"UTF-8\">
         <link rel=\"icon\" href=\"$SITE_FAVICON_URL?v=$a\" />
     </head>
 <body>
 ";
-
-function get_vars($x) {
-    $out_vars="";
-    foreach($x as $k => $v) {
-        if(is_array($v)) {
-            $out_vars.="$k = array<br>";
-            $out_vars.=get_vars($v);
-        }
-        else
-            $out_vars.="$k = [$v]<br>";
-    }
-    return $out_vars;
-}
 
 if(isset($_SESSION["DEBUG_VARS"])) {
     $out_vars=get_vars($_REQUEST);
@@ -131,7 +147,7 @@ if(!logged_in()) {
     //echo"<BR>LOGIN<BR><BR>";
 
     echo "
-            <form action=\"login.php\" method=\"post\">
+            <form action=\"$SITE_URL/login.php\" method=\"post\">
             <div class=\"containerz\">
                 <label for=\"uname\"><b>Username</b></label>
                 <input type=\"text\" placeholder=\"Enter Username\" name=\"uname\" required>
@@ -143,11 +159,11 @@ if(!logged_in()) {
             ";
 
         echo"
-        <form action=\"register.php\">
+        <form action=\"$SITE_URL/register.php\">
         <input type=\"submit\" value=REGISTER>
         </form>";
         
-        echo "<a id=wut href=\"forgot.php\">Forgot Password?</a>";
+        echo "<a id=wut href=\"$SITE_URL/forgot.php\">Forgot Password?</a>";
 
 
     }
@@ -157,31 +173,26 @@ else {
     // show profile here, logout, my meatloaf, etc
 
     if($USER_DATA["profile_pic"]!="empty") {
-        put_avatar($USER_DATA["profile_pic"],96,96,"","profile.php");
+        put_avatar($USER_DATA["profile_pic"],150,150,"","$SITE_URL/profile.php");
         
     }
     else {
-        put_avatar("$SITE_URL/images/system/user.png",96,96,"","profile.php");
+        put_avatar("$SITE_URL/images/system/user.png",150,150,"","$SITE_URL/profile.php");
         
     }
     echo "&nbsp;&nbsp;<div class=white id=white>".$_SESSION["LOGGED_IN"]."</div><BR>";
     
-    put_link("$SITE_URL/profile.php","EDIT PROFILE");
+    put_link("$SITE_URL/profile.php","PROFILE");
 
+    
+    foreach($SITE_LEFT_MENU as $k => $v) {
+    $url=strtolower($k);
+    $url=str_replace(" ","_",$url);
+    $url.=".php";
     echo "<br>";
-    echo "<BR>";
-    put_link("$SITE_URL/todo.php","TODO: LEFT MENUs");
-
-   /*
     echo "<br>";
-    echo "<BR>";
-    put_link("mymeatloaf.php","MY MEATLOAF");
-
-    echo "<br>";
-    echo "<BR>";
-    put_link("myshortcodes.php","MY SHORT CODES");
-
-    */
+    put_link($v["URL"],$k);
+}
 
     echo "<BR>";
     echo "<BR>";
