@@ -9,9 +9,11 @@ $v=$_REQUEST["verify"];
 $n=$_REQUEST["name"];
 $i=$_REQUEST["id"];
 
+
 echo "[$v]<br>";
 
 if($v=="true"){
+
     if($i==$USER_DATA["id"]) {
         echo "[$i]<br>";
         echo "YOU ARE NOW VERIFIED!<br>";

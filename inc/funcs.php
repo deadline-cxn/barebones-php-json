@@ -1,8 +1,6 @@
 <?php
 include("config.php");
 
-
-
 function get_vars($x) {
     $out_vars="";
     foreach($x as $k => $v) {
@@ -15,7 +13,6 @@ function get_vars($x) {
     }
     return $out_vars;
 }
-
 
 function get_vars2($x) {
     $o="<pre>";
@@ -31,9 +28,64 @@ function get_vars2($x) {
     return $o;
 }
 
+function dump_vars($x) {
+    echo "<pre>";
+    foreach ($x as $k => $v ) {
+        if(is_array($v)) {
+            dump_vars($v);
+        }
+        else {
+            echo "-[$k] = [$v] <br>";
+        }
+    }
 
+    echo "</pre>";
+}
 
+function randomPassword() {
+    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789!@#$%^&*(";
+    for ($i = 0; $i < 8; $i++) {
+        $n = rand(0, strlen($alphabet)-1);
+        $pass[$i] = $alphabet[$n];
+    }
+    
+    return implode("",$pass);
+}
 
+function debug_print($txt) {
+    if(isset($_SESSION["DEBUG"]))
+    echo "<div class=warn id=warn>DEBUG: $txt</div>";
+    
+}
+function predump($x) {
+        if(isset($_SESSION["DEBUG_VARS"])) {
+        echo"<br><pre>";
+        var_dump($x);
+        echo"<br></pre>";
+    }
+}
+function preprint($x) {
+    echo"<br><pre>";
+    $x;
+    echo"<br></pre>";
+}
+
+function warn($txt) { 
+    echo "<div class=warn id=warn>$txt</div>";
+}
+
+function are_you_sure($url_to_do) {
+    echo "<br>";
+    echo "<form action=\"$url_to_do\" method=post>";
+
+    warn("<h2> ARE YOU SURE? </h2>");
+
+    echo "<input type=submit name=Yes value=Yes>";
+    echo "<input type=submit name=No value=No>";
+    
+
+    echo "</form>";
+}
 
 function put_image($url,$words) {  echo "<img src=\"$url\" alt=\"$words\">"; }
 
@@ -79,3 +131,18 @@ function create_guid() { // Create GUID (Globally Unique Identifier)
             substr($hash, 20, 12);
     return $guid;
 }
+
+
+function send_discord_channel_message($SITE_DISCORD_CHANNEL_WEBHOOK,$SITE_DISCORD_DATA,$s) {
+        $SITE_DISCORD_DATA["content"]=$s;
+        $post_data = json_encode($SITE_DISCORD_DATA);
+        $crl = curl_init($SITE_DISCORD_CHANNEL_WEBHOOK);
+        curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+        curl_setopt($crl, CURLOPT_POST, true);
+        curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($crl, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: ' . strlen($post_data)));
+        $result = curl_exec($crl);
+        curl_close($crl);
+}
+

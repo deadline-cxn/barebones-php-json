@@ -3,7 +3,7 @@ include("config.php");
 include("inc/funcs.php");
 require("inc/json.php");
 include("inc/class.email.php");
-include("../../include/phylactery/lib.funcs.php");
+#include("../../include/phylactery/lib.funcs.php");
 
 session_name($SITE_SESSION_NAME);
 session_cache_expire(99999);
@@ -29,6 +29,35 @@ $a=rand(0,99999999);
 echo "
 <html>
     <head>
+		<meta content='width=device-width, initial-scale=1, shrink-to-fit=no' name='viewport'>
+		<meta content='A Commodore IEC Serial multi-device emulator' name='description'>
+		<meta content='Jaime Idolpx' name='author'>
+
+		<meta name=\"keywords\" content=\"Meatloaf Commodore\" />
+		<meta name=\"news_keywords\" content=\"Meatloaf Commodore\" />
+		<meta name=\"language\" content=\"English\">
+
+		<!-- TYPE BELOW IS PROBABLY: 'website' or 'article' or look on https://ogp.me/#types -->
+		<meta property=\"og:type\" content='website'/>
+		<meta property=\"og:locale\" content=\"en_US\" />
+		<meta property=\"og:title\" content=\"Meatloaf!\" />
+		<meta property=\"og:description\" content=\"A Commodore IEC Serial multi-device emulator\" />
+		<meta property=\"og:url\" content=\"https://meatloaf.cc\" />
+		<meta property=\"og:site_name\" content=\"Meatloaf!\" />
+		<meta property=\"og:updated_time\" content=\"2024-02-28T14:22:00+00:00\" />
+		<meta property=\"og:image:type\" content=\"image/svg\">
+		<meta property=\"og:image\" content=\"http://meatloaf.cc/media/meatloaf.logo.svg\" />
+		<meta property=\"og:image:secure_url\" content=\"https://meatloaf.cc/media/meatloaf.logo.svg\" />
+		<meta property=\"og:image:width\" content=\"1200\" />
+		<meta property=\"og:image:height\" content=\"630\" />
+		<meta name=\"twitter:card\" content=\"summary_large_image\" />
+		<meta name=\"twitter:description\" content=\"A Commodore IEC Serial multi-device emulator\" />
+		<meta name=\"twitter:title\" content=\"Meatloaf!\" />
+		<meta name=\"twitter:image\" content=\"https://meatloaf.cc/media/meatloaf.logo.svg\" />
+		<link rel=\"shortcut icon\" type=\"image/png\" href=\"/media/meatloaf.icon.32.png\"/>
+		<!--link rel=\"manifest\" href=\"manifest.json\"-->
+
+
         <link rel=\"stylesheet\" type=\"text/css\" href=\"$SITE_CSS_URL?v=$a\" />
         <meta charset=\"UTF-8\">
         <link rel=\"icon\" href=\"$SITE_FAVICON_URL?v=$a\" />
@@ -127,11 +156,11 @@ if(!logged_in()) {
             ";
 
         echo"
-        <form action=\"register.php\">
+        <form action=\"$SITE_URL/register.php\">
         <input type=\"submit\" value=REGISTER>
         </form>";
         
-        echo "<a id=wut href=\"forgot.php\">Forgot Password?</a>";
+        echo "<a id=wut href=\"$SITE_URL/forgot.php\">Forgot Password?</a>";
 
 
     }

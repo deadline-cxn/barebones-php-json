@@ -3,7 +3,6 @@ chdir("..");
 include("header.php");
 debug_print(__FILE__."<br>");
 
-
 $access=access("admin");
 if($access) {
 
@@ -151,8 +150,7 @@ if($access) {
                 if(!empty($_REQUEST["Yes"])) {
                     warn("<h2>DELETING USER: $usr</h2>");
                     $p=$GLOBALS["SITE_JSON_USERS"];
-                    $cd = getcwd();
-                    $f="$cd/$p/$usr";
+                    $f="$p/$usr";
                     $cmd="rm -rf $f";
                     
                     //warn("<h2>FOLDER: $f</h2><h2>cmd: $cmd</h2>");
@@ -183,13 +181,16 @@ if($access) {
                     echo "</td><td>";
                     echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$u\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
                     echo "</td><td>";
+
+		            $u = strtolower($user["name"]);
                     if( (empty($user["profile_pic"])) || 
                         ($user["profile_pic"]=="empty") 
                     ){
-                        put_avatar("$SITE_URL/images/system/user.png",64,64,"","$SITE_URL/profile.php");
+                        put_avatar("$SITE_URL/images/system/user.png",64,64,"","$SITE_PROFILE_HEADER/@".$u);
                     }
                     else {
-                        put_avatar($user["profile_pic"],64,64,"","$SITE_URL/profile.php");
+                        put_avatar($user["profile_pic"],64,64,"","$SITE_PROFILE_HEADER/@".$u);
+
                     }
                     echo "</td><td>";
                     echo $user["name"];
