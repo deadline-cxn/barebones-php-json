@@ -3,6 +3,7 @@ include("config.php");
 include("inc/funcs.php");
 require("inc/json.php");
 include("inc/class.email.php");
+include("../../include/phylactery/lib.funcs.php");
 
 session_name($SITE_SESSION_NAME);
 session_cache_expire(99999);

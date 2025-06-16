@@ -28,6 +28,7 @@ function set_user_data($user,$USER_DATA) {
   $file="$p/$user/$user.json";
   //echo "set_user_data->[$file]";
   $x=json_encode($USER_DATA, JSON_PRETTY_PRINT);
+  echo nl2br($x);
   file_put_contents($file,$x);
 }
 

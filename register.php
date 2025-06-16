@@ -2,15 +2,6 @@
 include("header.php");
 debug_print(__FILE__."<br>");
 
-// dump_vars();
-
-if(isset($_REQUEST["verify"])) {
-    // verify=true
-    // id=ZZID
-    // name=ZZNAME
-}
-
-
 if(isset($_REQUEST["register"])) {
     echo "<hr>";
     echo "REGISTERING...<BR>";
@@ -18,6 +9,20 @@ if(isset($_REQUEST["register"])) {
     $pw=md5($_REQUEST["psw"]); // md5 password
     $cpw=md5($_REQUEST["cpsw"]); // confirm md5 password
     $em=$_REQUEST["email"];
+
+    @$user=get_user_list();
+    echo "<br>";
+    $email_found="";
+    foreach($user as $k => $v) {
+        $userdata=get_user_data($k);
+        if($userdata["email"]==$em) {
+            $email_found=$email;
+            $usr=$k;
+            echo "$email_found already exists! Try forgot password.<br>";
+            exit();
+        }
+    }
+
     $result=get_user_data($usr);
 
     if(!empty($result)) if($result["name"]!="null") {
@@ -25,7 +30,6 @@ if(isset($_REQUEST["register"])) {
 		exit();
     }
 
-    // echo "Wut";
     if($pw!=$cpw) {
         echo "Passwords do not match.<br>";
         exit();
