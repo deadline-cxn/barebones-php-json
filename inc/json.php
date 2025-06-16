@@ -5,7 +5,12 @@ function get_user_list() {
   $p=$GLOBALS["SITE_JSON_USERS"];
   $x=scandir("$p");
   foreach($x as $k => $v) {
-    if(($v!=".") && ($v!=".."))
+    if( ($v!=".") &&
+        ($v!="..") &&
+        ($v!=".json") &&
+        ($v!=".png") &&
+        ($v!=".jpg") )
+    
       $users[$v]=$v;
   }
   return $users;
@@ -24,8 +29,7 @@ function set_user_data($user,$USER_DATA) {
   $user=strtolower($user);
   @mkdir("$p/$user");
   $file="$p/$user/$user.json";
-  
-  
+
   foreach($USER_DATA as $k => $v) {
     if(!is_array($v)) {
       $USER_DATA[$k]=str_ireplace("<?php","*YOU CAN NOT USE PHP FOR THIS*", $USER_DATA[$k]);
@@ -37,7 +41,6 @@ function set_user_data($user,$USER_DATA) {
 
     }
   }
-
   $x=json_encode($USER_DATA, JSON_PRETTY_PRINT);
   file_put_contents($file,$x);
 }

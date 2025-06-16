@@ -22,6 +22,33 @@ if($access) {
         $act=$_REQUEST["act"];
 
         switch($act) {
+
+            case "gitlog":
+                echo "GIT Log... <hr>";
+                echo "<pre>";
+
+                $x=file_get_contents(".git/logs/HEAD");
+
+                $x=str_replace("<","&lt;",$x);
+                $x=str_replace(">","&gt;",$x);
+
+                echo $x;
+
+                echo "</pre><hr>";
+
+                break;
+
+            case "gitpull":
+
+                echo "Updating site... <hr>";
+                $cmd="git pull";
+                exec($cmd,$x);
+                foreach($x as $k => $v) {
+                    echo "$v<br>";
+                }
+                echo "<hr>Complete<br>";
+
+                break;
             
 
             case "user_edit_i":
@@ -124,16 +151,10 @@ if($access) {
                         }
                     }
                 }
-                
-                // predump($USER_DATA);
 
                 $act="user_edit";
                 set_user_data($usr,$USER_DATA);
-
                 echo "<meta http-equiv=\"refresh\" content=\"0; url=$SITE_URL/inc/admin.php?act=user_edit\">";
-                
-                
-
                 break;
 
 
@@ -164,8 +185,6 @@ if($access) {
                 echo "EDIT USERS";
                 echo "</h1><br>";
 
-                
-
                 $lc=0;
 
                 echo "<div id=outtab ><table border=0 cellspacing=0 cellpadding=10>";
@@ -175,32 +194,34 @@ if($access) {
 
                 foreach($users as $k => $u) {
                     $user=get_user_data($u);
-                    $lc++; if($lc>1) $lc=0;
-                    echo "<tr id=tr$lc><td>";
-                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_i&user=$u\"><img src=\"$SITE_URL/images/system/pen.png\" width=16 height=16></a>";
-                    echo "</td><td>";
-                    echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$u\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
-                    echo "</td><td>";
-
-		            $u = strtolower($user["name"]);
-                    if( (empty($user["profile_pic"])) || 
-                        ($user["profile_pic"]=="empty") 
-                    ){
-                        put_avatar("$SITE_URL/images/system/user.png",64,64,"","$SITE_PROFILE_HEADER/@".$u);
+                    if(!empty($user)) {
+                        $lc++; if($lc>1) $lc=0;
+                        echo "<tr id=tr$lc><td>";
+                        echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_i&user=$u\"><img src=\"$SITE_URL/images/system/pen.png\" width=16 height=16></a>";
+                        echo "</td><td>";
+                        echo "<a href=\"$SITE_URL/inc/admin.php?act=user_edit_d&user=$u\"><img src=\"$SITE_URL/images/system/x-button.png\" width=16 height=16></a>";
+                        echo "</td><td>";
+                        $u = strtolower($user["name"]);
+                        if( (empty($user["profile_pic"])) || 
+                            ($user["profile_pic"]=="empty") 
+                        ){
+                            $img_url = get_gravatar($USER_DATA["email"], $AVATAR_SIZE);
+                            put_avatar($img_url,$AVATAR_SIZE,$AVATAR_SIZE,"","$SITE_URL/profile.php");
+                            //put_avatar("$SITE_URL/images/system/user.png",64,64,"","https://meatloaf.cc/@".$u);
+                        }
+                        else {
+                            put_avatar($user["profile_pic"],64,64,"","https://meatloaf.cc/@".$u);
+                        }
+                        echo "</td><td>";
+                        echo $user["name"];
+                        echo"</td><td>";
+                        echo $user["email"];
+                        echo"</td><td>";
+                        foreach($user["access"] as $kk => $vv)
+                            echo "$vv ";
+                        echo "</td>";
+                        echo "</tr>";
                     }
-                    else {
-                        put_avatar($user["profile_pic"],64,64,"","$SITE_PROFILE_HEADER/@".$u);
-
-                    }
-                    echo "</td><td>";
-                    echo $user["name"];
-                    echo"</td><td>";
-                    echo $user["email"];
-                    echo"</td><td>";
-                    foreach($user["access"] as $kk => $vv)
-                        echo "$vv ";
-                    echo "</td>";
-                    echo "</tr>";
                     
                 }
                 echo "</table></div>";
@@ -225,6 +246,7 @@ if($access) {
                 echo "TOP MENU";
                 echo "</h1><br>";
 
+                warn("THIS IS UNDER CONSTRUCTION... DO NOT USE. (MANUALLY EDIT s/top_menu.php)");
 
                 echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 
@@ -290,6 +312,8 @@ if($access) {
                 echo "LEFT MENU";
                 echo "</h1><br>";
 
+                warn("THIS IS UNDER CONSTRUCTION... DO NOT USE. (MANUALLY EDIT s/left_menu.php)");
+
                 echo "<form action=\"$SITE_URL/inc/admin.php\" method=\"post\">";
                 
                 echo "<input type=hidden name=act value=left_menu_edit_go>";
@@ -334,6 +358,27 @@ if($access) {
         put_icon("$SITE_URL/images/system/admin_debug.png",64,64,"Toggle<br>DEBUG VARS","$SITE_URL/inc/admin.php?toggle_debug_v=1");
 
         echo "</td></tr>";
+
+        echo "<tr><td id=tda>";
+
+        echo "</td><td id=tda>";
+        put_icon("$SITE_URL/images/system/git.png",64,64,"GIT<br>PULL<br>UPDATE","$SITE_URL/inc/admin.php?act=gitpull");
+
+        echo "</td><td id=tda>";
+        put_icon("$SITE_URL/images/system/git.png",64,64,"GIT<br>LOG","$SITE_URL/inc/admin.php?act=gitlog");
+        
+
+        echo "</td><td id=tda>";
+        
+
+        echo "</td><td id=tda>";
+        
+
+        echo "</td><td id=tda>";
+        
+
+        echo "</td></tr>";
+
         echo "</table>";
         // echo "<hr>";
         }

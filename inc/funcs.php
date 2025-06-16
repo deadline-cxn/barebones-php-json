@@ -1,6 +1,8 @@
 <?php
 include("config.php");
 
+
+
 function get_vars($x) {
     $out_vars="";
     foreach($x as $k => $v) {
@@ -13,6 +15,7 @@ function get_vars($x) {
     }
     return $out_vars;
 }
+
 
 function get_vars2($x) {
     $o="<pre>";
@@ -28,6 +31,9 @@ function get_vars2($x) {
     return $o;
 }
 
+
+
+
 function dump_vars($x) {
     echo "<pre>";
     foreach ($x as $k => $v ) {
@@ -38,7 +44,6 @@ function dump_vars($x) {
             echo "-[$k] = [$v] <br>";
         }
     }
-
     echo "</pre>";
 }
 
@@ -114,6 +119,9 @@ function logged_in() {
 
 
 
+function goto_page($x) {
+	echo " <script language=\"javascript\" type=\"text/javascript\"> window.location=\"$x\"; </script> <!--// -->";
+}
 function create_guid() { // Create GUID (Globally Unique Identifier)
     $guid = '';
     $namespace = rand(11111, 99999);
@@ -146,3 +154,56 @@ function send_discord_channel_message($SITE_DISCORD_CHANNEL_WEBHOOK,$SITE_DISCOR
         curl_close($crl);
 }
 
+
+/**
+ * Get either a Gravatar URL or complete image tag for a specified email address.
+ *
+ * @param string $email The email address
+ * @param int $size Size in pixels, defaults to 64px [ 1 - 2048 ]
+ * @param string $default_image_type Default imageset to use [ 404 | mp | identicon | monsterid | wavatar ]
+ * @param bool $force_default Force default image always. By default false.
+ * @param string $rating Maximum rating (inclusive) [ g | pg | r | x ]
+ * @param bool $return_image True to return a complete IMG tag False for just the URL
+ * @param array $html_tag_attributes Optional, additional key/value attributes to include in the IMG tag
+ *
+ * @return string containing either just a URL or a complete image tag
+ * @source https://gravatar.com/site/implement/images/php/
+ */
+function get_gravatar(
+    $email,
+    $size = 64,
+    $default_image_type = 'mp',
+    $force_default = false,
+    $rating = 'g',
+    $return_image = false,
+    $html_tag_attributes = []
+) {
+    // Prepare parameters.
+    $params = [
+        's' => htmlentities( $size ),
+        'd' => htmlentities( $default_image_type ),
+        'r' => htmlentities( $rating ),
+    ];
+    if ( $force_default ) {
+        $params['f'] = 'y';
+    }
+ 
+    // Generate url.
+    $base_url = 'https://www.gravatar.com/avatar';
+    $hash = hash( 'sha256', strtolower( trim( $email ) ) );
+    $query = http_build_query( $params );
+    $url = sprintf( '%s/%s?%s', $base_url, $hash, $query );
+ 
+    // Return image tag if necessary.
+    if ( $return_image ) {
+        $attributes = '';
+        foreach ( $html_tag_attributes as $key => $value ) {
+            $value = htmlentities( $value, ENT_QUOTES, 'UTF-8' );
+            $attributes .= sprintf( '%s="%s" ', $key, $value );
+        }
+ 
+        return sprintf( '<img src="%s" %s/>', $url, $attributes );
+    }
+ 
+    return $url;
+}
